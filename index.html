@@ -62,16 +62,6 @@ h2{
   color:#f1f1f1;
 }
 
-/* AUDIO */
-.player{
-  margin-top:35px;
-}
-
-audio{
-  width:100%;
-  max-width:520px;
-}
-
 /* CONTACTO */
 .contact{
   padding:clamp(28px,5vw,60px) var(--pad);
@@ -88,7 +78,6 @@ a{
 }
 
 a:hover{ text-decoration:underline; }
-
 </style>
 </head>
 
@@ -102,14 +91,6 @@ a:hover{ text-decoration:underline; }
 <div class="section">
   Sesiones auténticas en vinilo de 7 pulgadas. Un viaje directo a las pistas de los 80 y 90
   con el sonido original, sin pantallas y sin artificios. Solo música y técnica real.
-
-  <div class="player">
-    <h3>Escucha un tema</h3>
-    <audio controls preload="none">
-      <source src="./assets/tema.mp3" type="audio/mpeg">
-      Tu navegador no soporta audio HTML5.
-    </audio>
-  </div>
 </div>
 
 <div class="contact">
@@ -117,6 +98,48 @@ a:hover{ text-decoration:underline; }
   <p>Email: <a href="mailto:7pulgadas.torres@gmail.com">7pulgadas.torres@gmail.com</a></p>
   <p>Teléfono: <a href="tel:+34667706199">667 706 199</a></p>
 </div>
+
+<!-- Audio oculto: autoplay permitido solo en mute -->
+<audio id="bg-music" autoplay loop muted playsinline preload="auto">
+  <source src="./assets/tema.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+(() => {
+  const audio = document.getElementById('bg-music');
+
+  // Intenta arrancar en mute lo antes posible
+  const tryStartMuted = async () => {
+    try { await audio.play(); } catch (e) { /* ignorar */ }
+  };
+
+  // En cuanto haya una interacción, activamos sonido y reproducimos
+  const enableSoundOnce = async () => {
+    try {
+      audio.muted = false;
+      audio.volume = 1.0;
+      await audio.play();
+    } catch (e) {
+      // Si algún navegador sigue bloqueando, vuelve a mute y listo.
+      audio.muted = true;
+    } finally {
+      window.removeEventListener('pointerdown', enableSoundOnce);
+      window.removeEventListener('keydown', enableSoundOnce);
+      window.removeEventListener('touchstart', enableSoundOnce);
+    }
+  };
+
+  // Arranque inicial
+  document.addEventListener('DOMContentLoaded', tryStartMuted);
+  // Fallback por si DOMContentLoaded ya pasó
+  tryStartMuted();
+
+  // Primera interacción del usuario en cualquier parte
+  window.addEventListener('pointerdown', enableSoundOnce, { passive: true });
+  window.addEventListener('touchstart', enableSoundOnce, { passive: true });
+  window.addEventListener('keydown', enableSoundOnce);
+})();
+</script>
 
 </body>
 </html>
