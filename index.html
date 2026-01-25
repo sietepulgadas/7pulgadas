@@ -19,7 +19,6 @@ body{
   background:#000;
   color:#fff;
   text-align:center;
-  -webkit-font-smoothing: antialiased;
 }
 
 /* HERO */
@@ -44,7 +43,7 @@ h1{
 }
 
 h2{
-  margin:clamp(12px,2vw,22px) 0 0 0;
+  margin-top:18px;
   font-weight:300;
   color:#ddd;
   font-size:clamp(16px,2.2vw,24px);
@@ -63,15 +62,14 @@ h2{
   color:#f1f1f1;
 }
 
-/* REPRODUCTOR */
+/* AUDIO */
 .player{
-  margin-top:30px;
+  margin-top:35px;
 }
 
 audio{
   width:100%;
   max-width:520px;
-  filter:invert(1); /* lo integra visualmente en el diseño negro */
 }
 
 /* CONTACTO */
@@ -106,9 +104,9 @@ a:hover{ text-decoration:underline; }
   con el sonido original, sin pantallas y sin artificios. Solo música y técnica real.
 
   <div class="player">
-    <h3 style="font-weight:600;">Escucha un tema</h3>
+    <h3>Escucha un tema</h3>
     <audio controls preload="none">
-      <source src="assets/tema.mp3" type="audio/mpeg">
+      <source src="./assets/tema.mp3" type="audio/mpeg">
       Tu navegador no soporta audio HTML5.
     </audio>
   </div>
