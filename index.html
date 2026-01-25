@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* Base */
 :root{
   --maxw: 900px;
   --pad: clamp(16px, 3vw, 28px);
@@ -21,17 +20,16 @@ body{
   color:#fff;
   text-align:center;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hero */
+/* HERO */
 header{
-  min-height: 100svh; /* mejor que 100vh en móviles con barras */
+  min-height:100svh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  padding: var(--pad);
+  padding:var(--pad);
   background:
     linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.60)),
     url('https://i.imgur.com/xYMzvMD.png') center/cover no-repeat;
@@ -40,64 +38,59 @@ header{
 h1{
   margin:0;
   font-weight:700;
-  letter-spacing: clamp(3px, 1.1vw, 10px);
-  font-size: clamp(40px, 6.5vw, 84px);
-  line-height: 1.05;
+  letter-spacing:clamp(3px,1.1vw,10px);
+  font-size:clamp(40px,6.5vw,84px);
+  line-height:1.05;
 }
 
 h2{
-  margin: clamp(12px, 2vw, 22px) 0 0 0;
+  margin:clamp(12px,2vw,22px) 0 0 0;
   font-weight:300;
   color:#ddd;
-  font-size: clamp(16px, 2.2vw, 24px);
-  line-height: 1.3;
+  font-size:clamp(16px,2.2vw,24px);
 }
 
-/* Secciones */
+/* SECCIONES */
 .section, .contact{
-  max-width: var(--maxw);
-  margin: clamp(40px, 7vw, 90px) auto;
-  padding: 0 var(--pad);
+  max-width:var(--maxw);
+  margin:clamp(40px,7vw,90px) auto;
+  padding:0 var(--pad);
 }
 
 .section{
-  font-size: clamp(16px, 2.1vw, 22px);
-  line-height: 1.75;
+  font-size:clamp(16px,2.1vw,22px);
+  line-height:1.75;
   color:#f1f1f1;
 }
 
-/* Contacto */
-.contact{
-  padding: clamp(28px, 5vw, 60px) var(--pad);
-  border-top:1px solid #333;
-  font-size: clamp(14px, 1.8vw, 18px);
+/* REPRODUCTOR */
+.player{
+  margin-top:30px;
 }
 
-.contact p{
-  margin: 12px 0;
+audio{
+  width:100%;
+  max-width:520px;
+  filter:invert(1); /* lo integra visualmente en el diseño negro */
 }
+
+/* CONTACTO */
+.contact{
+  padding:clamp(28px,5vw,60px) var(--pad);
+  border-top:1px solid #333;
+  font-size:clamp(14px,1.8vw,18px);
+}
+
+.contact p{ margin:12px 0; }
 
 a{
   color:#fff;
   text-decoration:none;
   font-weight:600;
-  word-break: break-word; /* evita desbordes en móvil */
 }
 
-a:hover, a:focus{
-  text-decoration: underline;
-}
+a:hover{ text-decoration:underline; }
 
-/* Ajustes específicos para pantallas muy pequeñas */
-@media (max-width: 360px){
-  h1{ letter-spacing: 2px; }
-  .contact p{ margin: 10px 0; }
-}
-
-/* Ajustes para pantallas grandes */
-@media (min-width: 1200px){
-  header{ background-position: center 35%; }
-}
 </style>
 </head>
 
@@ -109,8 +102,16 @@ a:hover, a:focus{
 </header>
 
 <div class="section">
-  Sesiones auténticas en vinilo. Un viaje directo a las pistas de los 80 y 90
+  Sesiones auténticas en vinilo de 7 pulgadas. Un viaje directo a las pistas de los 80 y 90
   con el sonido original, sin pantallas y sin artificios. Solo música y técnica real.
+
+  <div class="player">
+    <h3 style="font-weight:600;">Escucha un tema</h3>
+    <audio controls preload="none">
+      <source src="assets/tema.mp3" type="audio/mpeg">
+      Tu navegador no soporta audio HTML5.
+    </audio>
+  </div>
 </div>
 
 <div class="contact">
@@ -121,4 +122,3 @@ a:hover, a:focus{
 
 </body>
 </html>
-
