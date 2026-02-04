@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>7 Pulgadas – Eventos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --maxw: 900px;
+  --pad: clamp(16px, 3vw, 28px);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family: Helvetica, Arial, sans-serif;
+  background:#000;
+  color:#fff;
+  text-align:center;
+
+  opacity:0;
+  transition:opacity 1.2s ease;
+}
+body.loaded{ opacity:1; }
+
+/* MENU */
+.top-menu{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:2000;
+  text-align:left;
+}
+
+.menu-btn{
+  appearance:none;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.45);
+  border-radius:12px;
+  cursor:pointer;
+  backdrop-filter: blur(6px);
+}
+
+/* HAMBURGUESA */
+.hamburger{
+  width:46px;
+  height:42px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:7px;
+  padding:8px 10px;
+}
+.hamburger span{
+  display:block;
+  height:3px;
+  width:100%;
+  background:#fff;
+  border-radius:3px;
+  transition:0.3s ease;
+}
+.top-menu.open .hamburger span:nth-child(1){
+  transform:translateY(10px) rotate(45deg);
+}
+.top-menu.open .hamburger span:nth-child(2){
+  opacity:0;
+}
+.top-menu.open .hamburger span:nth-child(3){
+  transform:translateY(-10px) rotate(-45deg);
+}
+
+.dropdown{
+  position:absolute;
+  top:48px;
+  right:0;
+  min-width:190px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.72);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 10px 35px rgba(0,0,0,0.6);
+  transform: translateY(-6px);
+  opacity:0;
+  pointer-events:none;
+  transition: 0.18s ease;
+}
+.top-menu.open .dropdown{
+  opacity:1;
+  pointer-events:auto;
+  transform: translateY(0);
+}
+.dropdown a{
+  display:block;
+  padding:12px 14px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  letter-spacing:0.5px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.dropdown a:last-child{ border-bottom:none; }
+.dropdown a:hover{
+  background:rgba(255,255,255,0.08);
+  text-decoration:none;
+}
+
+/* HERO carrusel */
+header{
+  position:relative;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:var(--pad);
+  overflow:hidden;
+}
+
+.slide{
+  position:absolute;
+  inset:0;
+  z-index:-2;
+
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-position:center 20%;
+
+  opacity:0;
+  filter:blur(18px);
+  transform:scale(1.08);
+  transition: opacity 1.1s ease, filter 1.8s ease, transform 1.8s ease;
+}
+
+.slide.active{
+  opacity:1;
+}
+
+.slide.focused{
+  filter:blur(0px);
+  transform:scale(1);
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62));
+}
+
+h1{
+  margin:0;
+  font-weight:700;
+  letter-spacing:clamp(3px,1.1vw,10px);
+  font-size:clamp(34px,5.5vw,70px);
+  line-height:1.05;
+
+  transform:translateY(20px);
+  opacity:0;
+  transition:all 1s ease 0.5s;
+}
+
+h2{
+  margin-top:16px;
+  font-weight:300;
+  color:#ddd;
+  font-size:clamp(16px,2.0vw,22px);
+
+  transform:translateY(20px);
+  opacity:0;
+  transition:all 1s ease 0.7s;
+}
+
+body.loaded h1,
+body.loaded h2{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* texto de cada slide */
+.tag{
+  margin-top:22px;
+  display:inline-block;
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,0.22);
+  background:rgba(0,0,0,0.35);
+  border-radius:999px;
+  letter-spacing:1px;
+  font-weight:700;
+  font-size:clamp(12px,1.6vw,15px);
+  text-transform:uppercase;
+
+  transform:translateY(12px);
+  opacity:0;
+  transition:all 0.7s ease 0.2s;
+}
+.tag.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* pie */
+.footer{
+  position:absolute;
+  bottom:22px;
+  left:0;
+  width:100%;
+  padding:0 var(--pad);
+  color:#bbb;
+  font-size:14px;
+  z-index:1;
+}
+.footer a{
+  color:#fff;
+  font-weight:600;
+  text-decoration:none;
+}
+.footer a:hover{ text-decoration:underline; }
+</style>
+</head>
+
+<body>
+
+<div class="top-menu" id="topMenu">
+  <button class="menu-btn hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
+    <a href="index.html" role="menuitem">Inicio</a>
+    <a href="quienes.html" role="menuitem">Quiénes somos</a>
+    <a href="contacto.html" role="menuitem">Contacto</a>
+  </div>
+</div>
+
+<header>
+  <div class="slide" id="slideA"></div>
+  <div class="slide" id="slideB"></div>
+  <div class="overlay"></div>
+
+  <h1>EVENTOS</h1>
+  <h2>Formatos donde llevamos el vinilo a tu público</h2>
+  <div class="tag" id="tag">Festivales de Música</div>
+
+  <div class="footer">
+    Volver a <a href="index.html">Inicio</a>
+  </div>
+</header>
+
+<script>
+(() => {
+  // Fundido inicial
+  window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+  });
+
+  // Menú
+  const topMenu = document.getElementById('topMenu');
+  const menuBtn = document.getElementById('menuBtn');
+  const dropdown = document.getElementById('dropdown');
+
+  const closeMenu = () => {
+    topMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleMenu = () => {
+    const isOpen = topMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+  dropdown.addEventListener('click', closeMenu);
+  window.addEventListener('click', closeMenu);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Carrusel
+  const items = [
+    { img: "assets/imagen_3.png",  text: "Festivales de Música" },
+    { img: "assets/imagen_6.png",  text: "Congresos" },
+    { img: "assets/imagen_14.png", text: "Fiestas de Cumpleaños" },
+    { img: "assets/imagen_9.png",  text: "Fiestas Municipales" },
+    { img: "assets/imagen_16.png", text: "Inauguraciones" },
+    // Si quieres incluir Pubs como sexto slide, duplica una imagen o añade otra:
+    // { img: "assets/imagen_X.png", text: "Pubs" },
+  ];
+
+  const slideA = document.getElementById('slideA');
+  const slideB = document.getElementById('slideB');
+  const tag = document.getElementById('tag');
+
+  let current = 0;
+  let showingA = true;
+
+  const setSlide = (el, url) => {
+    el.style.backgroundImage = `url('${url}')`;
+  };
+
+  const activate = (el) => {
+    el.classList.add('active');
+    // forzar reflow para que la transición blur->focus se dispare
+    void el.offsetWidth;
+    el.classList.add('focused');
+  };
+
+  const deactivate = (el) => {
+    el.classList.remove('focused');
+    el.classList.remove('active');
+  };
+
+  const showTag = (text) => {
+    tag.classList.remove('show');
+    // pequeño delay para que el cambio sea suave
+    setTimeout(() => {
+      tag.textContent = text;
+      tag.classList.add('show');
+    }, 120);
+  };
+
+  const go = (index) => {
+    const next = items[index];
+
+    const incoming = showingA ? slideB : slideA;
+    const outgoing = showingA ? slideA : slideB;
+
+    setSlide(incoming, next.img);
+    deactivate(incoming);
+    // activar
+    requestAnimationFrame(() => activate(incoming));
+    // desactivar la anterior después de que haya empezado la transición
+    setTimeout(() => deactivate(outgoing), 450);
+
+    showingA = !showingA;
+    showTag(next.text);
+  };
+
+  // precarga ligera
+  items.forEach(it => { const img = new Image(); img.src = it.img; });
+
+  // inicial
+  setSlide(slideA, items[0].img);
+  activate(slideA);
+  tag.textContent = items[0].text;
+  tag.classList.add('show');
+
+  // rotación
+  setInterval(() => {
+    current = (current + 1) % items.length;
+    go(current);
+  }, 4500);
+})();
+</script>
+
+</body>
+</html>
