@@ -19,7 +19,6 @@ body{
   background:#000;
   color:#fff;
   text-align:center;
-
   opacity:0;
   transition:opacity 1.4s ease;
 }
@@ -106,7 +105,7 @@ body.loaded{ opacity:1; }
   text-decoration:none;
 }
 
-/* HERO con fondo desenfocado -> enfocado */
+/* HERO */
 header{
   position:relative;
   min-height:60svh;
@@ -130,7 +129,6 @@ header::before{
   transition:filter 1.8s ease, transform 1.8s ease;
   z-index:-1;
 }
-
 body.loaded header::before{
   filter:blur(0px);
   transform:scale(1);
@@ -142,7 +140,6 @@ h1{
   letter-spacing:clamp(3px,1.1vw,10px);
   font-size:clamp(34px,5.5vw,70px);
   line-height:1.05;
-
   transform:translateY(20px);
   opacity:0;
   transition:all 1s ease 0.6s;
@@ -152,7 +149,6 @@ h2{
   font-weight:300;
   color:#ddd;
   font-size:clamp(16px,2.0vw,22px);
-
   transform:translateY(20px);
   opacity:0;
   transition:all 1s ease 0.8s;
@@ -240,11 +236,13 @@ body.loaded h2{
     <span></span><span></span><span></span>
   </button>
 
- <div class="dropdown">
-  <a href="home.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='home.html';">Inicio</a>
-  <a href="quienes.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='quienes.html';">Quiénes somos</a>
-  <a href="eventos.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='eventos.html';">Eventos</a>
-  <a href="contacto.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='contacto.html';">Contacto</a>
+  <!-- IMPORTANTE: ahora sí tiene id="dropdown" -->
+  <div class="dropdown" id="dropdown">
+    <a href="home.html" data-go="home.html">Inicio</a>
+    <a href="quienes.html" data-go="quienes.html">Quiénes somos</a>
+    <a href="eventos.html" data-go="eventos.html">Eventos</a>
+    <a href="contacto.html" data-go="contacto.html">Contacto</a>
+  </div>
 </div>
 
 <header>
@@ -297,7 +295,7 @@ body.loaded h2{
 </main>
 
 <div class="footer">
-  Volver a <a href="index.html">Inicio</a>
+  Volver a <a href="home.html" data-go="home.html">Inicio</a>
 </div>
 
 <script>
@@ -316,6 +314,20 @@ body.loaded h2{
     menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   };
 
+  // Navegación robusta: si existe iframe, cambia el src; si no, navega normal
+  const navigate = (page) => {
+    try{
+      const frame = window.parent && window.parent.document
+        ? window.parent.document.getElementById('contentFrame')
+        : null;
+
+      if (frame) frame.src = page;
+      else window.location.href = page;
+    } catch(e) {
+      window.location.href = page;
+    }
+  };
+
   menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleMenu();
@@ -325,6 +337,15 @@ body.loaded h2{
   window.addEventListener('click', closeMenu);
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();
+  });
+
+  // links con data-go
+  document.querySelectorAll('[data-go]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigate(a.getAttribute('data-go'));
+      closeMenu();
+    });
   });
 
   window.addEventListener('load', () => {
