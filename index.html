@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>7 Pulgadas – Vinyl DJ Sets</title>
+<title>7 Pulgadas – Quiénes somos</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -12,8 +12,6 @@
 }
 
 *{ box-sizing: border-box; }
-
-html{ scroll-behavior:smooth; }
 
 body{
   margin:0;
@@ -40,14 +38,35 @@ body{
   padding:10px 12px;
   border-radius:12px;
   cursor:pointer;
-  font-weight:600;
-  letter-spacing:1px;
   backdrop-filter: blur(6px);
 }
 
-.menu-btn:focus{
-  outline:2px solid rgba(255,255,255,0.35);
-  outline-offset:2px;
+/* botón hamburguesa (tres rayas) */
+.hamburger{
+  width:46px;
+  height:42px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:7px;
+  padding:8px 10px;
+}
+.hamburger span{
+  display:block;
+  height:3px;
+  width:100%;
+  background:#fff;
+  border-radius:3px;
+  transition:0.3s ease;
+}
+.top-menu.open .hamburger span:nth-child(1){
+  transform:translateY(10px) rotate(45deg);
+}
+.top-menu.open .hamburger span:nth-child(2){
+  opacity:0;
+}
+.top-menu.open .hamburger span:nth-child(3){
+  transform:translateY(-10px) rotate(-45deg);
 }
 
 .dropdown{
@@ -92,60 +111,81 @@ body{
 
 /* HERO */
 header{
-  min-height:100svh;
+  min-height:60svh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   padding:var(--pad);
   background:
-    linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.60)),
-    url('https://i.imgur.com/xYMzvMD.png') center/cover no-repeat;
+    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+    url('https://i.imgur.com/6wY0G0n.jpg') center/cover no-repeat; /* FOTO NUEVA */
 }
 
 h1{
   margin:0;
   font-weight:700;
   letter-spacing:clamp(3px,1.1vw,10px);
-  font-size:clamp(40px,6.5vw,84px);
+  font-size:clamp(34px,5.5vw,70px);
   line-height:1.05;
 }
 
 h2{
-  margin-top:18px;
+  margin-top:14px;
   font-weight:300;
   color:#ddd;
-  font-size:clamp(16px,2.2vw,24px);
+  font-size:clamp(16px,2.0vw,22px);
 }
 
-/* SECCIONES */
-.section, .contact{
-  max-width:var(--maxw);
-  margin:clamp(40px,7vw,90px) auto;
-  padding:0 var(--pad);
-}
-
+/* CONTENIDO */
 .section{
-  font-size:clamp(16px,2.1vw,22px);
-  line-height:1.75;
+  max-width:var(--maxw);
+  margin:clamp(30px,6vw,70px) auto;
+  padding:0 var(--pad);
+  font-size:clamp(16px,2.0vw,20px);
+  line-height:1.85;
   color:#f1f1f1;
+  text-align:left;
 }
 
-/* CONTACTO */
-.contact{
-  padding:clamp(28px,5vw,60px) var(--pad);
-  border-top:1px solid #333;
-  font-size:clamp(14px,1.8vw,18px);
+.section h3{
+  margin:0 0 18px 0;
+  font-size:clamp(18px,2.4vw,24px);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  text-align:center;
 }
 
-.contact p{ margin:12px 0; }
+.box{
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.03);
+  border-radius:16px;
+  padding:clamp(18px,3vw,26px);
+}
 
-a{
+ul{
+  margin:18px auto 0 auto;
+  padding-left:18px;
+  max-width:800px;
+}
+
+li{ margin:12px 0; }
+
+/* footer mini */
+.footer{
+  max-width:var(--maxw);
+  margin:0 auto clamp(30px,6vw,70px) auto;
+  padding:0 var(--pad);
+  color:#bbb;
+  font-size:14px;
+}
+
+.footer a{
   color:#fff;
-  text-decoration:none;
   font-weight:600;
+  text-decoration:none;
 }
-a:hover{ text-decoration:underline; }
+.footer a:hover{ text-decoration:underline; }
 </style>
 </head>
 
@@ -153,78 +193,41 @@ a:hover{ text-decoration:underline; }
 
 <!-- Desplegable -->
 <div class="top-menu" id="topMenu">
-<button class="menu-btn hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
+  <button class="menu-btn hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 
-<div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
-  <a href="quienes.html" role="menuitem">Quiénes somos</a>
-  <a href="eventos.html" role="menuitem">Eventos</a>
-  <a href="contacto.html" role="menuitem">Contacto</a>
-</div>
+  <div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
+    <a href="index.html" role="menuitem">Inicio</a>
+    <a href="eventos.html" role="menuitem">Eventos</a>
+    <a href="contacto.html" role="menuitem">Contacto</a>
+  </div>
 </div>
 
 <header>
-  <h1>7 PULGADAS</h1>
-  <h2>Música con surco y nostalgia</h2>
+  <h1>QUIÉNES SOMOS</h1>
+  <h2>Asociación cultural y divulgación musical</h2>
 </header>
 
-<!-- QUIENES SOMOS -->
-<div id="quienes" class="section">
-  <strong>Quiénes somos</strong><br><br>
-  Sesiones auténticas en vinilo de 7 pulgadas. Un viaje directo a las pistas de los 80 y 90
-  con el sonido original, sin pantallas y sin artificios. Solo música y técnica real.
-</div>
+<main class="section">
+  <h3>7 Pulgadas</h3>
 
-<!-- EVENTOS -->
-<div id="eventos" class="section">
-  <strong>Eventos</strong><br><br>
-  Aquí puedes añadir el calendario o las próximas fechas. Si quieres, lo dejamos como lista
-  con ciudad, sala, fecha y enlace a entradas o redes.
-</div>
+  <div class="box">
+    7 pulgadas es una asociación cuyo objetivo reside en impulsar la divulgación musical en todas sus vertientes, promoviendo la participación activa de la sociedad en actividades relacionadas en este ámbito. La asociación centrará sus esfuerzos en:
+    <ul>
+      <li>a) Promover y difundir la cultura musical de socios, vecinos y ciudadanos.</li>
+      <li>b) Organizar eventos culturales y educativos como conciertos, talleres, charlas, exposiciones y seminarios, dirigidos a todos los públicos, para contribuir al enriquecimiento cultural de la comunidad, prestando especial atención en ámbitos rurales.</li>
+      <li>c) Utilizar la música como instrumento para promover la igualdad, derechos humanos, inclusión, cooperación y voluntariado.</li>
+    </ul>
+  </div>
+</main>
 
-<!-- CONTACTO -->
-<div id="contacto" class="contact">
-  <p>Facebook: <a href="https://facebook.com/sietepulgadasbyloscolines">sietepulgadasbyloscolines</a></p>
-  <p>Email: <a href="mailto:7pulgadas.torres@gmail.com">7pulgadas.torres@gmail.com</a></p>
-  <p>Teléfono: <a href="tel:+34667706199">667 706 199</a></p>
+<div class="footer">
+  Volver a <a href="index.html">Inicio</a>
 </div>
-
-<!-- Audio invisible -->
-<audio id="bg-music" autoplay loop muted playsinline preload="auto">
-  <source src="./assets/tema.mp3" type="audio/mpeg">
-</audio>
 
 <script>
 (() => {
-  // Audio
-  const audio = document.getElementById('bg-music');
-
-  const tryStartMuted = async () => {
-    try { await audio.play(); } catch(e) {}
-  };
-
-  const enableSoundOnce = async () => {
-    try {
-      audio.muted = false;
-      audio.volume = 1.0;
-      await audio.play();
-    } catch(e) {
-      audio.muted = true;
-    } finally {
-      window.removeEventListener('pointerdown', enableSoundOnce);
-      window.removeEventListener('touchstart', enableSoundOnce);
-      window.removeEventListener('keydown', enableSoundOnce);
-    }
-  };
-
-  tryStartMuted();
-  window.addEventListener('pointerdown', enableSoundOnce, { passive:true });
-  window.addEventListener('touchstart', enableSoundOnce, { passive:true });
-  window.addEventListener('keydown', enableSoundOnce);
-
   // Menú desplegable
   const topMenu = document.getElementById('topMenu');
   const menuBtn = document.getElementById('menuBtn');
@@ -245,11 +248,7 @@ a:hover{ text-decoration:underline; }
     toggleMenu();
   });
 
-  dropdown.addEventListener('click', () => {
-    // al pinchar un item, cerrar
-    closeMenu();
-  });
-
+  dropdown.addEventListener('click', closeMenu);
   window.addEventListener('click', closeMenu);
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();
@@ -259,5 +258,3 @@ a:hover{ text-decoration:underline; }
 
 </body>
 </html>
-
-
