@@ -13,12 +13,81 @@
 
 *{ box-sizing: border-box; }
 
+html{ scroll-behavior:smooth; }
+
 body{
   margin:0;
   font-family: Helvetica, Arial, sans-serif;
   background:#000;
   color:#fff;
   text-align:center;
+}
+
+/* MENU DESPLEGABLE (arriba derecha) */
+.top-menu{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:2000;
+  text-align:left;
+}
+
+.menu-btn{
+  appearance:none;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.45);
+  color:#fff;
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+  letter-spacing:1px;
+  backdrop-filter: blur(6px);
+}
+
+.menu-btn:focus{
+  outline:2px solid rgba(255,255,255,0.35);
+  outline-offset:2px;
+}
+
+.dropdown{
+  position:absolute;
+  top:48px;
+  right:0;
+  min-width:190px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.72);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 10px 35px rgba(0,0,0,0.6);
+  transform: translateY(-6px);
+  opacity:0;
+  pointer-events:none;
+  transition: 0.18s ease;
+}
+
+.dropdown a{
+  display:block;
+  padding:12px 14px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  letter-spacing:0.5px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.dropdown a:last-child{ border-bottom:none; }
+
+.dropdown a:hover{
+  background:rgba(255,255,255,0.08);
+  text-decoration:none;
+}
+
+/* Abierto */
+.top-menu.open .dropdown{
+  opacity:1;
+  pointer-events:auto;
+  transform: translateY(0);
 }
 
 /* HERO */
@@ -82,17 +151,40 @@ a:hover{ text-decoration:underline; }
 
 <body>
 
+<!-- Desplegable -->
+<div class="top-menu" id="topMenu">
+  <button class="menu-btn" id="menuBtn" aria-haspopup="true" aria-expanded="false">
+    Menú ▾
+  </button>
+
+  <div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
+    <a href="#quienes" role="menuitem">Quiénes somos</a>
+    <a href="#eventos" role="menuitem">Eventos</a>
+    <a href="#contacto" role="menuitem">Contacto</a>
+  </div>
+</div>
+
 <header>
   <h1>7 PULGADAS</h1>
   <h2>Música con surco y nostalgia</h2>
 </header>
 
-<div class="section">
+<!-- QUIENES SOMOS -->
+<div id="quienes" class="section">
+  <strong>Quiénes somos</strong><br><br>
   Sesiones auténticas en vinilo de 7 pulgadas. Un viaje directo a las pistas de los 80 y 90
   con el sonido original, sin pantallas y sin artificios. Solo música y técnica real.
 </div>
 
-<div class="contact">
+<!-- EVENTOS -->
+<div id="eventos" class="section">
+  <strong>Eventos</strong><br><br>
+  Aquí puedes añadir el calendario o las próximas fechas. Si quieres, lo dejamos como lista
+  con ciudad, sala, fecha y enlace a entradas o redes.
+</div>
+
+<!-- CONTACTO -->
+<div id="contacto" class="contact">
   <p>Facebook: <a href="https://facebook.com/sietepulgadasbyloscolines">sietepulgadasbyloscolines</a></p>
   <p>Email: <a href="mailto:7pulgadas.torres@gmail.com">7pulgadas.torres@gmail.com</a></p>
   <p>Teléfono: <a href="tel:+34667706199">667 706 199</a></p>
@@ -105,6 +197,7 @@ a:hover{ text-decoration:underline; }
 
 <script>
 (() => {
+  // Audio
   const audio = document.getElementById('bg-music');
 
   const tryStartMuted = async () => {
@@ -129,6 +222,36 @@ a:hover{ text-decoration:underline; }
   window.addEventListener('pointerdown', enableSoundOnce, { passive:true });
   window.addEventListener('touchstart', enableSoundOnce, { passive:true });
   window.addEventListener('keydown', enableSoundOnce);
+
+  // Menú desplegable
+  const topMenu = document.getElementById('topMenu');
+  const menuBtn = document.getElementById('menuBtn');
+  const dropdown = document.getElementById('dropdown');
+
+  const closeMenu = () => {
+    topMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleMenu = () => {
+    const isOpen = topMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  dropdown.addEventListener('click', () => {
+    // al pinchar un item, cerrar
+    closeMenu();
+  });
+
+  window.addEventListener('click', closeMenu);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
 })();
 </script>
 
