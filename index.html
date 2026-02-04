@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>7 Pulgadas – Quiénes somos</title>
+<title>7 Pulgadas – Vinyl DJ Sets</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -13,35 +13,40 @@
 
 *{ box-sizing: border-box; }
 
+html{ scroll-behavior:smooth; }
+
+/* FUNDIDO INVERSO */
 body{
   margin:0;
   font-family: Helvetica, Arial, sans-serif;
   background:#000;
   color:#fff;
   text-align:center;
+  opacity:0;
+  transition:opacity 1.4s ease;
 }
 
-/* MENU DESPLEGABLE (arriba derecha) */
+body.loaded{
+  opacity:1;
+}
+
+/* MENU */
 .top-menu{
   position:fixed;
   top:14px;
   right:14px;
   z-index:2000;
-  text-align:left;
 }
 
 .menu-btn{
-  appearance:none;
   border:1px solid rgba(255,255,255,0.25);
   background:rgba(0,0,0,0.45);
-  color:#fff;
-  padding:10px 12px;
   border-radius:12px;
   cursor:pointer;
   backdrop-filter: blur(6px);
 }
 
-/* botón hamburguesa (tres rayas) */
+/* HAMBURGUESA */
 .hamburger{
   width:46px;
   height:42px;
@@ -51,14 +56,14 @@ body{
   gap:7px;
   padding:8px 10px;
 }
+
 .hamburger span{
-  display:block;
   height:3px;
-  width:100%;
   background:#fff;
   border-radius:3px;
   transition:0.3s ease;
 }
+
 .top-menu.open .hamburger span:nth-child(1){
   transform:translateY(10px) rotate(45deg);
 }
@@ -74,186 +79,106 @@ body{
   top:48px;
   right:0;
   min-width:190px;
-  border:1px solid rgba(255,255,255,0.18);
-  background:rgba(0,0,0,0.72);
+  background:rgba(0,0,0,0.75);
   border-radius:14px;
   overflow:hidden;
-  box-shadow:0 10px 35px rgba(0,0,0,0.6);
-  transform: translateY(-6px);
   opacity:0;
   pointer-events:none;
-  transition: 0.18s ease;
+  transition:0.2s ease;
+}
+
+.top-menu.open .dropdown{
+  opacity:1;
+  pointer-events:auto;
 }
 
 .dropdown a{
   display:block;
-  padding:12px 14px;
+  padding:12px;
   color:#fff;
   text-decoration:none;
-  font-weight:600;
-  letter-spacing:0.5px;
-  border-bottom:1px solid rgba(255,255,255,0.08);
 }
-
-.dropdown a:last-child{ border-bottom:none; }
 
 .dropdown a:hover{
-  background:rgba(255,255,255,0.08);
-  text-decoration:none;
-}
-
-/* Abierto */
-.top-menu.open .dropdown{
-  opacity:1;
-  pointer-events:auto;
-  transform: translateY(0);
+  background:rgba(255,255,255,0.1);
 }
 
 /* HERO */
 header{
-  min-height:60svh;
+  min-height:100svh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   padding:var(--pad);
- background:
+  background:
   linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-  url('./assets/imagen.jpg') center/cover no-repeat;
+  url('https://i.imgur.com/LOQUESEA.jpg') center/cover no-repeat;
 }
 
 h1{
   margin:0;
   font-weight:700;
-  letter-spacing:clamp(3px,1.1vw,10px);
-  font-size:clamp(34px,5.5vw,70px);
-  line-height:1.05;
+  letter-spacing:8px;
+  font-size:64px;
+  transform:translateY(20px);
+  opacity:0;
+  transition:all 1s ease 0.6s;
 }
 
 h2{
-  margin-top:14px;
+  margin-top:18px;
   font-weight:300;
   color:#ddd;
-  font-size:clamp(16px,2.0vw,22px);
+  transform:translateY(20px);
+  opacity:0;
+  transition:all 1s ease 0.8s;
 }
 
-/* CONTENIDO */
-.section{
-  max-width:var(--maxw);
-  margin:clamp(30px,6vw,70px) auto;
-  padding:0 var(--pad);
-  font-size:clamp(16px,2.0vw,20px);
-  line-height:1.85;
-  color:#f1f1f1;
-  text-align:left;
+body.loaded h1,
+body.loaded h2{
+  transform:translateY(0);
+  opacity:1;
 }
 
-.section h3{
-  margin:0 0 18px 0;
-  font-size:clamp(18px,2.4vw,24px);
-  letter-spacing:1px;
-  text-transform:uppercase;
-  text-align:center;
-}
-
-.box{
-  border:1px solid rgba(255,255,255,0.14);
-  background:rgba(255,255,255,0.03);
-  border-radius:16px;
-  padding:clamp(18px,3vw,26px);
-}
-
-ul{
-  margin:18px auto 0 auto;
-  padding-left:18px;
-  max-width:800px;
-}
-
-li{ margin:12px 0; }
-
-/* footer mini */
-.footer{
-  max-width:var(--maxw);
-  margin:0 auto clamp(30px,6vw,70px) auto;
-  padding:0 var(--pad);
-  color:#bbb;
-  font-size:14px;
-}
-
-.footer a{
-  color:#fff;
-  font-weight:600;
-  text-decoration:none;
-}
-.footer a:hover{ text-decoration:underline; }
 </style>
 </head>
 
 <body>
 
-<!-- Desplegable -->
 <div class="top-menu" id="topMenu">
-  <button class="menu-btn hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false">
+  <button class="menu-btn hamburger" id="menuBtn">
     <span></span><span></span><span></span>
   </button>
 
-  <div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
-    <a href="index.html" role="menuitem">Inicio</a>
-    <a href="eventos.html" role="menuitem">Eventos</a>
-    <a href="contacto.html" role="menuitem">Contacto</a>
+  <div class="dropdown">
+    <a href="quienes.html">Quiénes somos</a>
+    <a href="eventos.html">Eventos</a>
+    <a href="contacto.html">Contacto</a>
   </div>
 </div>
 
 <header>
-  <h1>QUIÉNES SOMOS</h1>
-  <h2>Asociación cultural y divulgación musical</h2>
+  <h1>7 PULGADAS</h1>
+  <h2>Música con surco y nostalgia</h2>
 </header>
 
-<main class="section">
-  <h3>7 Pulgadas</h3>
-
-  <div class="box">
-    7 pulgadas es una asociación cuyo objetivo reside en impulsar la divulgación musical en todas sus vertientes, promoviendo la participación activa de la sociedad en actividades relacionadas en este ámbito. La asociación centrará sus esfuerzos en:
-    <ul>
-      <li>a) Promover y difundir la cultura musical de socios, vecinos y ciudadanos.</li>
-      <li>b) Organizar eventos culturales y educativos como conciertos, talleres, charlas, exposiciones y seminarios, dirigidos a todos los públicos, para contribuir al enriquecimiento cultural de la comunidad, prestando especial atención en ámbitos rurales.</li>
-      <li>c) Utilizar la música como instrumento para promover la igualdad, derechos humanos, inclusión, cooperación y voluntariado.</li>
-    </ul>
-  </div>
-</main>
-
-<div class="footer">
-  Volver a <a href="index.html">Inicio</a>
-</div>
-
 <script>
-(() => {
-  // Menú desplegable
-  const topMenu = document.getElementById('topMenu');
-  const menuBtn = document.getElementById('menuBtn');
-  const dropdown = document.getElementById('dropdown');
+const topMenu = document.getElementById('topMenu');
+const menuBtn = document.getElementById('menuBtn');
 
-  const closeMenu = () => {
-    topMenu.classList.remove('open');
-    menuBtn.setAttribute('aria-expanded', 'false');
-  };
+menuBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  topMenu.classList.toggle('open');
+});
 
-  const toggleMenu = () => {
-    const isOpen = topMenu.classList.toggle('open');
-    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  };
+window.addEventListener('click', () => {
+  topMenu.classList.remove('open');
+});
 
-  menuBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
-
-  dropdown.addEventListener('click', closeMenu);
-  window.addEventListener('click', closeMenu);
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMenu();
-  });
-})();
+window.addEventListener('load', () => {
+  document.body.classList.add('loaded');
+});
 </script>
 
 </body>
