@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>7 Pulgadas – Vinyl DJ Sets</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --maxw: 900px;
+  --pad: clamp(16px, 3vw, 28px);
+}
+
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior:smooth; }
+
+/* FUNDIDO INVERSO */
+body{
+  margin:0;
+  font-family: Helvetica, Arial, sans-serif;
+  background:#000;
+  color:#fff;
+  text-align:center;
+  opacity:0;
+  transition:opacity 1.4s ease;
+}
+
+body.loaded{ opacity:1; }
+
+/* MENU */
+.top-menu{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:2000;
+}
+
+.menu-btn{
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.45);
+  border-radius:12px;
+  cursor:pointer;
+  backdrop-filter: blur(6px);
+}
+
+/* HAMBURGUESA */
+.hamburger{
+  width:46px;
+  height:42px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:7px;
+  padding:8px 10px;
+}
+
+.hamburger span{
+  height:3px;
+  background:#fff;
+  border-radius:3px;
+  transition:0.3s ease;
+}
+
+.top-menu.open .hamburger span:nth-child(1){
+  transform:translateY(10px) rotate(45deg);
+}
+.top-menu.open .hamburger span:nth-child(2){
+  opacity:0;
+}
+.top-menu.open .hamburger span:nth-child(3){
+  transform:translateY(-10px) rotate(-45deg);
+}
+
+.dropdown{
+  position:absolute;
+  top:48px;
+  right:0;
+  min-width:190px;
+  background:rgba(0,0,0,0.75);
+  border-radius:14px;
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+}
+
+.top-menu.open .dropdown{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.dropdown a{
+  display:block;
+  padding:12px 14px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.dropdown a:hover{
+  background:rgba(255,255,255,0.1);
+}
+
+/* HERO */
+header{
+  position:relative;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:var(--pad);
+  overflow:hidden;
+}
+
+/* CAPA DE IMAGEN */
+header::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+    url('https://raw.githubusercontent.com/sietepulgadas/7pulgadas/main/assets/Imagen.png') center/cover no-repeat;
+  filter:blur(18px);
+  transform:scale(1.08);
+  transition:filter 1.8s ease, transform 1.8s ease;
+  z-index:-1;
+}
+
+/* Cuando carga, se enfoca */
+body.loaded header::before{
+  filter:blur(0px);
+  transform:scale(1);
+}
+
+h1{
+  margin:0;
+  font-weight:700;
+  letter-spacing:8px;
+  font-size:64px;
+  transform:translateY(20px);
+  opacity:0;
+  transition:all 1s ease 0.6s;
+}
+
+h2{
+  margin-top:18px;
+  font-weight:300;
+  color:#ddd;
+  transform:translateY(20px);
+  opacity:0;
+  transition:all 1s ease 0.8s;
+}
+
+body.loaded h1,
+body.loaded h2{
+  transform:translateY(0);
+  opacity:1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-menu" id="topMenu">
+  <button class="menu-btn hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
+    <a href="quienes.html" data-go="quienes.html" role="menuitem">Quiénes somos</a>
+    <a href="eventos.html" data-go="eventos.html" role="menuitem">Eventos</a>
+    <a href="contacto.html" data-go="contacto.html" role="menuitem">Contacto</a>
+  </div>
+</div>
+
+<header>
+  <h1>7 PULGADAS</h1>
+  <h2>Música con surco y nostalgia</h2>
+</header>
+
+<script>
+(() => {
+  const topMenu = document.getElementById('topMenu');
+  const menuBtn = document.getElementById('menuBtn');
+
+  const closeMenu = () => {
+    topMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleMenu = () => {
+    const isOpen = topMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+
+  // Navegación robusta: si existe iframe, cambia el src; si no, navega normal
+  const navigate = (page) => {
+    try{
+      const frame = window.parent && window.parent.document
+        ? window.parent.document.getElementById('contentFrame')
+        : null;
+
+      if (frame) {
+        frame.src = page;
+      } else {
+        window.location.href = page; // funciona si abres home.html suelto
+      }
+    } catch(e) {
+      window.location.href = page;
+    }
+  };
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  // Click fuera cierra
+  window.addEventListener('click', closeMenu);
+
+  // ESC cierra
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Links del menú
+  document.querySelectorAll('[data-go]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const page = a.getAttribute('data-go');
+      navigate(page);
+      closeMenu();
+    });
+  });
+
+  // Fundido inicial
+  window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+  });
+})();
+</script>
+
+</body>
+</html>
