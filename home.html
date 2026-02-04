@@ -25,7 +25,6 @@ body{
   opacity:0;
   transition:opacity 1.4s ease;
 }
-
 body.loaded{ opacity:1; }
 
 /* MENU */
@@ -114,7 +113,7 @@ header{
   overflow:hidden;
 }
 
-/* CAPA DE IMAGEN */
+/* CAPA DE IMAGEN + DEFORMACIÓN AL PASAR RATÓN */
 header::before{
   content:"";
   position:absolute;
@@ -122,16 +121,22 @@ header::before{
   background:
     linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
     url('https://raw.githubusercontent.com/sietepulgadas/7pulgadas/main/assets/Imagen.png') center/cover no-repeat;
+
+  /* arranque desenfocado */
   filter:blur(18px);
-  transform:scale(1.08);
-  transition:filter 1.8s ease, transform 1.8s ease;
+
+  /* desplazamiento "interferencia" controlado por variables */
+  transform: translate(var(--dx,0), var(--dy,0)) scale(var(--scale,1.08));
+  transition:
+    filter 1.8s ease,
+    transform 0.12s ease-out;
+
   z-index:-1;
 }
 
 /* Cuando carga, se enfoca */
 body.loaded header::before{
   filter:blur(0px);
-  transform:scale(1);
 }
 
 /* ===== EFECTO INTERFERENCIA / GLITCH PARA EL H1 ===== */
@@ -231,8 +236,7 @@ body.loaded h2{
   </div>
 </div>
 
-<header>
-  <!-- H1 con interferencias -->
+<header id="hero">
   <h1 class="glitch" data-text="7 PULGADAS">7 PULGADAS</h1>
   <h2>Música con surco y nostalgia</h2>
 </header>
@@ -259,11 +263,8 @@ body.loaded h2{
         ? window.parent.document.getElementById('contentFrame')
         : null;
 
-      if (frame) {
-        frame.src = page;
-      } else {
-        window.location.href = page;
-      }
+      if (frame) frame.src = page;
+      else window.location.href = page;
     } catch(e) {
       window.location.href = page;
     }
@@ -274,31 +275,52 @@ body.loaded h2{
     toggleMenu();
   });
 
-  // Click fuera cierra
   window.addEventListener('click', closeMenu);
 
-  // ESC cierra
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();
   });
 
-  // Links del menú
   document.querySelectorAll('[data-go]').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      const page = a.getAttribute('data-go');
-      navigate(page);
+      navigate(a.getAttribute('data-go'));
       closeMenu();
     });
   });
 
-  // Fundido inicial
   window.addEventListener('load', () => {
     document.body.classList.add('loaded');
+  });
+
+  /* ===== DEFORMACIÓN / INTERFERENCIA AL PASAR RATÓN POR EL HERO ===== */
+  const hero = document.getElementById('hero');
+
+  const setVars = (x, y, scale) => {
+    hero.style.setProperty('--dx', x + 'px');
+    hero.style.setProperty('--dy', y + 'px');
+    hero.style.setProperty('--scale', scale);
+  };
+
+  hero.addEventListener('mousemove', (e) => {
+    const r = hero.getBoundingClientRect();
+    const nx = ((e.clientX - r.left) / r.width) - 0.5;   // -0.5..0.5
+    const ny = ((e.clientY - r.top) / r.height) - 0.5;  // -0.5..0.5
+
+    // Intensidad "interferencia"
+    const dx = nx * 26;
+    const dy = ny * 18;
+
+    setVars(dx, dy, 1.12);
+  });
+
+  hero.addEventListener('mouseleave', () => {
+    setVars(0, 0, 1.08);
   });
 })();
 </script>
 
+<!-- Música SOLO en la página principal -->
 <audio id="bg-music" loop playsinline preload="auto">
   <source src="assets/tema.mp3" type="audio/mpeg">
 </audio>
@@ -306,18 +328,15 @@ body.loaded h2{
 <script>
 const audio = document.getElementById('bg-music');
 
-// Truco real para que el navegador permita el audio
+// Activar música con el primer click (requisito de navegador)
 document.body.addEventListener('click', () => {
   audio.muted = false;
   audio.play();
 }, { once:true });
 </script>
-  
+
 </body>
 </html>
-
-
-
 
 
 
