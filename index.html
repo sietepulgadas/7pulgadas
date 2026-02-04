@@ -104,17 +104,38 @@ body.loaded{
 }
 
 /* HERO */
-header{
+  header{
+  position:relative;
   min-height:100svh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   padding:var(--pad);
+  overflow:hidden;
+}
+
+/* CAPA DE IMAGEN */
+header::before{
+  content:"";
+  position:absolute;
+  inset:0;
   background:
     linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-    url('https://raw.githubusercontent.com/sietepulgadas/7pulgadas/main/assets/Imagen.png') center/cover no-repeat;
+     url('https://raw.githubusercontent.com/sietepulgadas/7pulgadas/main/assets/Imagen.png') center/cover no-repeat;
+  
+  filter:blur(18px);
+  transform:scale(1.08);
+  transition:filter 1.8s ease, transform 1.8s ease;
+  z-index:-1;
 }
+
+/* Cuando carga, se enfoca */
+body.loaded header::before{
+  filter:blur(0px);
+  transform:scale(1);
+}
+
 
 h1{
   margin:0;
@@ -183,6 +204,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
