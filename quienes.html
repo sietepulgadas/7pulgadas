@@ -126,16 +126,15 @@ header::before{
   background:
     linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
     url('assets/imagen_15.png') no-repeat;
-    
+
   background-size: cover;
-  background-position: center 20%;  /* <- CLAVE */
+  background-position: center 20%;
 
   filter:blur(18px);
   transform:scale(1.08);
   transition:filter 1.8s ease, transform 1.8s ease;
   z-index:-1;
 }
-  
 body.loaded header::before{
   filter:blur(0px);
   transform:scale(1);
@@ -147,7 +146,6 @@ h1{
   letter-spacing:clamp(3px,1.1vw,10px);
   font-size:clamp(34px,5.5vw,70px);
   line-height:1.05;
-
   transform:translateY(20px);
   opacity:0;
   transition:all 1s ease 0.6s;
@@ -157,7 +155,6 @@ h2{
   font-weight:300;
   color:#ddd;
   font-size:clamp(16px,2.0vw,22px);
-
   transform:translateY(20px);
   opacity:0;
   transition:all 1s ease 0.8s;
@@ -225,11 +222,13 @@ li{ margin:12px 0; }
     <span></span><span></span><span></span>
   </button>
 
-<div class="dropdown">
-  <a href="quienes.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='quienes.html';">Quiénes somos</a>
-  <a href="eventos.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='eventos.html';">Eventos</a>
-  <a href="contacto.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='contacto.html';">Contacto</a>
-</div>
+  <!-- IMPORTANTE: ahora sí tiene id="dropdown" -->
+  <div class="dropdown" id="dropdown">
+    <a href="home.html" data-go="home.html">Inicio</a>
+    <a href="quienes.html" data-go="quienes.html">Quiénes somos</a>
+    <a href="eventos.html" data-go="eventos.html">Eventos</a>
+    <a href="contacto.html" data-go="contacto.html">Contacto</a>
+  </div>
 </div>
 
 <header>
@@ -251,7 +250,7 @@ li{ margin:12px 0; }
 </main>
 
 <div class="footer">
-  Volver a <a href="index.html">Inicio</a>
+  Volver a <a href="home.html" data-go="home.html">Inicio</a>
 </div>
 
 <script>
@@ -270,6 +269,20 @@ li{ margin:12px 0; }
     menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   };
 
+  // Navegación robusta: si existe iframe, cambia el src; si no, navega normal
+  const navigate = (page) => {
+    try{
+      const frame = window.parent && window.parent.document
+        ? window.parent.document.getElementById('contentFrame')
+        : null;
+
+      if (frame) frame.src = page;
+      else window.location.href = page;
+    } catch(e) {
+      window.location.href = page;
+    }
+  };
+
   menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleMenu();
@@ -279,6 +292,15 @@ li{ margin:12px 0; }
   window.addEventListener('click', closeMenu);
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();
+  });
+
+  // links con data-go (menú + footer)
+  document.querySelectorAll('[data-go]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigate(a.getAttribute('data-go'));
+      closeMenu();
+    });
   });
 
   window.addEventListener('load', () => {
