@@ -134,6 +134,65 @@ body.loaded header::before{
   transform:scale(1);
 }
 
+/* ===== EFECTO INTERFERENCIA / GLITCH PARA EL H1 ===== */
+.glitch{
+  position:relative;
+  display:inline-block;
+  animation:glitch-skew 3s infinite linear alternate-reverse;
+}
+
+.glitch::before,
+.glitch::after{
+  content: attr(data-text);
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  overflow:hidden;
+}
+
+.glitch::before{
+  left:2px;
+  text-shadow:-2px 0 red;
+  clip-path: inset(0 0 65% 0);
+  animation:glitch-top 2.2s infinite linear alternate-reverse;
+}
+
+.glitch::after{
+  left:-2px;
+  text-shadow:-2px 0 cyan;
+  clip-path: inset(65% 0 0 0);
+  animation:glitch-bottom 2.7s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-top{
+  0%{ transform:translate(0); }
+  20%{ transform:translate(-2px,2px); }
+  40%{ transform:translate(-2px,-2px); }
+  60%{ transform:translate(2px,2px); }
+  80%{ transform:translate(2px,-2px); }
+  100%{ transform:translate(0); }
+}
+
+@keyframes glitch-bottom{
+  0%{ transform:translate(0); }
+  20%{ transform:translate(2px,-2px); }
+  40%{ transform:translate(2px,2px); }
+  60%{ transform:translate(-2px,-2px); }
+  80%{ transform:translate(-2px,2px); }
+  100%{ transform:translate(0); }
+}
+
+@keyframes glitch-skew{
+  0%{ transform:skew(0deg); }
+  20%{ transform:skew(1deg); }
+  40%{ transform:skew(-1deg); }
+  60%{ transform:skew(0.5deg); }
+  80%{ transform:skew(-0.5deg); }
+  100%{ transform:skew(0deg); }
+}
+/* ===== FIN GLITCH ===== */
+
 h1{
   margin:0;
   font-weight:700;
@@ -176,7 +235,8 @@ body.loaded h2{
 </div>
 
 <header>
-  <h1>7 PULGADAS</h1>
+  <!-- H1 con interferencias -->
+  <h1 class="glitch" data-text="7 PULGADAS">7 PULGADAS</h1>
   <h2>Música con surco y nostalgia</h2>
 </header>
 
@@ -205,7 +265,7 @@ body.loaded h2{
       if (frame) {
         frame.src = page;
       } else {
-        window.location.href = page; // funciona si abres home.html suelto
+        window.location.href = page;
       }
     } catch(e) {
       window.location.href = page;
@@ -244,8 +304,6 @@ body.loaded h2{
 
 </body>
 </html>
-
-
 
 
 
