@@ -250,9 +250,19 @@ window.addEventListener('pointerdown', () => {
   }
 }, { once: true });
 </script>
+
+<script>
+// Reenvía el primer click al index para activar el audio
+window.addEventListener('pointerdown', () => {
+  if (parent && parent.document) {
+    parent.document.dispatchEvent(new Event('pointerdown'));
+  }
+}, { once: true });
+</script>
   
 </body>
 </html>
+
 
 
 
