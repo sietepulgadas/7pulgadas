@@ -26,9 +26,7 @@ body{
   transition:opacity 1.4s ease;
 }
 
-body.loaded{
-  opacity:1;
-}
+body.loaded{ opacity:1; }
 
 /* MENU */
 .top-menu{
@@ -94,9 +92,10 @@ body.loaded{
 
 .dropdown a{
   display:block;
-  padding:12px;
+  padding:12px 14px;
   color:#fff;
   text-decoration:none;
+  font-weight:600;
 }
 
 .dropdown a:hover{
@@ -104,7 +103,7 @@ body.loaded{
 }
 
 /* HERO */
-  header{
+header{
   position:relative;
   min-height:100svh;
   display:flex;
@@ -122,8 +121,7 @@ header::before{
   inset:0;
   background:
     linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-     url('https://raw.githubusercontent.com/sietepulgadas/7pulgadas/main/assets/Imagen.png') center/cover no-repeat;
-  
+    url('https://raw.githubusercontent.com/sietepulgadas/7pulgadas/main/assets/Imagen.png') center/cover no-repeat;
   filter:blur(18px);
   transform:scale(1.08);
   transition:filter 1.8s ease, transform 1.8s ease;
@@ -135,7 +133,6 @@ body.loaded header::before{
   filter:blur(0px);
   transform:scale(1);
 }
-
 
 h1{
   margin:0;
@@ -161,54 +158,92 @@ body.loaded h2{
   transform:translateY(0);
   opacity:1;
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="top-menu" id="topMenu">
-  <button class="menu-btn hamburger" id="menuBtn">
+  <button class="menu-btn hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 
- <div class="dropdown">
-  <a href="quienes.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='quienes.html';">Quiénes somos</a>
-  <a href="eventos.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='eventos.html';">Eventos</a>
-  <a href="contacto.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='contacto.html';">Contacto</a>
+  <div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
+    <a href="quienes.html" data-go="quienes.html" role="menuitem">Quiénes somos</a>
+    <a href="eventos.html" data-go="eventos.html" role="menuitem">Eventos</a>
+    <a href="contacto.html" data-go="contacto.html" role="menuitem">Contacto</a>
+  </div>
 </div>
-</div>
+
 <header>
   <h1>7 PULGADAS</h1>
   <h2>Música con surco y nostalgia</h2>
 </header>
 
 <script>
-const topMenu = document.getElementById('topMenu');
-const menuBtn = document.getElementById('menuBtn');
+(() => {
+  const topMenu = document.getElementById('topMenu');
+  const menuBtn = document.getElementById('menuBtn');
 
-menuBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  topMenu.classList.toggle('open');
-});
+  const closeMenu = () => {
+    topMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  };
 
-window.addEventListener('click', () => {
-  topMenu.classList.remove('open');
-});
+  const toggleMenu = () => {
+    const isOpen = topMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
 
-window.addEventListener('load', () => {
-  document.body.classList.add('loaded');
-});
+  // Navegación robusta: si existe iframe, cambia el src; si no, navega normal
+  const navigate = (page) => {
+    try{
+      const frame = window.parent && window.parent.document
+        ? window.parent.document.getElementById('contentFrame')
+        : null;
+
+      if (frame) {
+        frame.src = page;
+      } else {
+        window.location.href = page; // funciona si abres home.html suelto
+      }
+    } catch(e) {
+      window.location.href = page;
+    }
+  };
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  // Click fuera cierra
+  window.addEventListener('click', closeMenu);
+
+  // ESC cierra
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Links del menú
+  document.querySelectorAll('[data-go]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const page = a.getAttribute('data-go');
+      navigate(page);
+      closeMenu();
+    });
+  });
+
+  // Fundido inicial
+  window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+  });
+})();
 </script>
 
-
-  
 </body>
 </html>
-
-
-
-
 
 
 
