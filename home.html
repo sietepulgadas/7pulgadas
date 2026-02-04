@@ -172,11 +172,10 @@ body.loaded h2{
     <span></span><span></span><span></span>
   </button>
 
-  <div class="dropdown">
-    <a href="quienes.html">Quiénes somos</a>
-    <a href="eventos.html">Eventos</a>
-    <a href="contacto.html">Contacto</a>
-  </div>
+ <div class="dropdown">
+  <a href="quienes.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='quienes.html';">Quiénes somos</a>
+  <a href="eventos.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='eventos.html';">Eventos</a>
+  <a href="contacto.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='contacto.html';">Contacto</a>
 </div>
 
 <header>
@@ -206,6 +205,7 @@ window.addEventListener('load', () => {
   
 </body>
 </html>
+
 
 
 
