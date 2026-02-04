@@ -225,11 +225,11 @@ li{ margin:12px 0; }
     <span></span><span></span><span></span>
   </button>
 
-  <div class="dropdown" id="dropdown" role="menu" aria-label="Navegación">
-    <a href="index.html" role="menuitem">Inicio</a>
-    <a href="eventos.html" role="menuitem">Eventos</a>
-    <a href="contacto.html" role="menuitem">Contacto</a>
-  </div>
+<div class="dropdown">
+  <a href="quienes.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='quienes.html';">Quiénes somos</a>
+  <a href="eventos.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='eventos.html';">Eventos</a>
+  <a href="contacto.html" onclick="event.preventDefault(); parent.document.getElementById('contentFrame').src='contacto.html';">Contacto</a>
+</div>
 </div>
 
 <header>
